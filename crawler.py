@@ -18,7 +18,16 @@ SOURCES = [
     
     # 也可以添加网页 URL，脚本会自动提取其中的节点链接
     # "https://example.com/nodes",
+]SOURCES = [
+    # 已有的源...
+    "https://raw.githubusercontent.com/freefq/free/master/v2",
+    "https://raw.githubusercontent.com/Pawdroid/Free-servers/main/sub",
+    
+    # 添加更多源（示例）
+    "https://example1.com/free-nodes",
+    "https://example2.com/sub",
 ]
+
 
 # 输出文件
 OUTPUT_FILE = "index.html"

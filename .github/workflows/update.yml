@@ -39,14 +39,11 @@ jobs:
           python3 -c "
           import os
           base64_content = open('nodes_base64.txt').read().strip()
-          sub_url = os.environ.get('SUB_URL', '')
           html = open('index.html').read()
           html = html.replace('placeholder', 'data:text/plain;base64,' + base64_content)
           open('index.html', 'w').write(html)
-          print('[OK] Updated URLs')
+          print('[OK] Updated Base64 URL in HTML')
           "
-        env:
-          SUB_URL: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/nodes_base64.txt
       
       - name: Commit and push
         run: |

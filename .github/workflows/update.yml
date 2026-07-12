@@ -1,0 +1,70 @@
+name: Update Nodes
+
+on:
+  schedule:
+    # 每 6 小时运行一次（UTC 时间）
+    - cron: '0 */6 * * *'
+  # 允许手动触发
+  workflow_dispatch:
+
+# 设置权限
+permissions:
+  contents: write
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    
+    steps:
+      # 1. 检出代码
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+      
+      # 2. 设置 Python 环境
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      
+      # 3. 安装依赖
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install requests beautifulsoup4
+      
+      # 4. 运行爬虫脚本
+      - name: Run crawler
+        run: python crawler.py
+      
+      # 5. 替换订阅 URL 占位符
+      - name: Update subscription URL
+        run: |
+          # 获取仓库信息
+          REPO_OWNER="${{ github.repository_owner }}"
+          REPO_NAME="${{ github.event.repository.name }}"
+          SUB_URL="https://${REPO_OWNER}.github.io/${REPO_NAME}/nodes_base64.txt"
+          BASE64_URL="data:text/plain;base64,$(cat nodes_base64.txt)"
+          
+          # 替换 HTML 中的占位符
+          sed -i "s|SUB_URL_PLACEHOLDER|${SUB_URL}|g" index.html
+          sed -i "s|BASE64_URL_PLACEHOLDER|${BASE64_URL}|g" index.html
+          
+          echo "订阅 URL: ${SUB_URL}"
+      
+      # 6. 提交并推送更改
+      - name: Commit and push
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          
+          # 检查是否有文件变更
+          if git diff --quiet && git diff --staged --quiet; then
+            echo "没有变更需要提交"
+            exit 0
+          fi
+          
+          git add -A
+          git commit -m "🔄 自动更新节点 $(date -u '+%Y-%m-%d %H:%M UTC')"
+          git push

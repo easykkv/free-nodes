@@ -10,8 +10,19 @@ from datetime import datetime
 
 # ========== 配置区 ==========
 SOURCES = [
+   # === GitHub 订阅源 ===
+    "https://raw.githubusercontent.com/ermaozi/get_subscribe/main/subscribe/v2ray.txt",
+    "https://raw.githubusercontent.com/peasoft/NoMoreWalls/master/list.txt",
+    "https://raw.githubusercontent.com/yebekhe/TelegramV2rayCollector/main/sub/base64",
+    "https://raw.githubusercontent.com/MhdiTaheri/free-v2ray-collector/main/collector/output/base64",
+    
+    # === 直接订阅链接 ===
+    "https://sub.445569.xyz",
     "https://raw.githubusercontent.com/freefq/free/master/v2",
+    
+    # === 其他活跃源 ===
     "https://raw.githubusercontent.com/Pawdroid/Free-servers/main/sub",
+    "https://raw.githubusercontent.com/alanbobs999/TopFreeProxies/master/Eternity",
 ]
 
 OUTPUT_FILE = "index.html"
